@@ -6,7 +6,7 @@ server.listen(process.env.PORT || 3000);
 console.log("SERVER RUNNING...");
 
 connections = [];
-
+app.use(express.static(__dirname));
 app.get('/', function(req, res) {
 	res.sendFile(__dirname+'/index.html');
 });
@@ -20,4 +20,5 @@ io.sockets.on('connection', function(socket) {
 		console.log('1 socket disconnected. %s left.', connections.length);
 	})
 });
+
 

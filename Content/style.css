@@ -1,0 +1,25 @@
+body {
+	display: block;
+}
+canvas {
+ 	border:2px solid #000000;
+ 	margin: auto;
+	background-color: #ffffff;
+	display: block;
+}
+button {
+	background-color: #ff3399; /* Green */
+    border: none;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+    border:2px solid #000000;
+    margin: auto;
+    margin-top: 30px;
+    display: block;
+}
