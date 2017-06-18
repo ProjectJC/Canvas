@@ -21,4 +21,4 @@ io.sockets.on('connection', function(socket) {
 	})
 });
 
-
+//SET PATH=C:\Program Files\Nodejs;%PATH%
