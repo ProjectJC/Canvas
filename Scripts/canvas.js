@@ -1,4 +1,5 @@
 context = document.getElementById('canvas').getContext("2d");
+var socket = io.connect("http://localhost:3000")
 
 var clickX = [];
 var clickY = [];
@@ -15,33 +16,75 @@ document.getElementById("button").addEventListener("click", buttonClicked);
 function mouseDown(e) {
   var mouseX = e.pageX - this.offsetLeft;
   var mouseY = e.pageY - this.offsetTop;
-    
+  socket.emit('mouseDown', {
+    x:mouseX,
+    y:mouseY
+  }); 
+}
+
+socket.on('mouseDown', function(data) {
+  console.log('down');
+  var mouseX = data.x;
+  var mouseY = data.y;
+      
   paint = true;
-  addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop);
+  addClick(mouseX, mouseY);
   redraw();
-}
+});
 
+
+
+//------Mouse move
 function mouseMove(e) {
-   if(paint){
-    addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
-    redraw();
-  }
+  console.log('MOUSE MOVE');
+  socket.emit('mouseMove', {
+    x: e.pageX- this.offsetLeft,
+    y: e.pageY - this.offsetTop
+  });
 }
 
+
+socket.on('mouseMove', function(data){
+  if(paint){
+      addClick(data.x, data.y, true);
+      redraw();
+    }
+})
+
+
+
+//--------Mouse up
 function mouseUp(e) {
-  paint = false;
+  socket.emit('mouseUp');
 }
 
+socket.on('mouseUp', function(){
+  paint=false;
+});
+
+//---------Mouse leave
 function mouseLeave(e) {
-  paint = false;
+  socket.emit('mouseLeave');
 }
+
+socket.on('mouseLeave', function(){
+  paint=false;
+});
 
 function buttonClicked(e) {
+  socket.emit('clear');
+}
+
+socket.on('clear', function(){
+  console.log('CLEAR');
   context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Clears the canvas
   clickX = [];
-  clickY = [];
-  clickDrag = [];
-}
+    clickY = [];
+    clickDrag = [];
+});
+
+
+
  
 function addClick(x, y, dragging) {
   clickX.push(x);
@@ -51,7 +94,6 @@ function addClick(x, y, dragging) {
 
 function redraw(){
   //context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Clears the canvas
-  
   context.strokeStyle = "#df4b26";
   context.lineJoin = "round";
   context.lineWidth = 3;
