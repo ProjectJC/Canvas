@@ -1,3 +1,4 @@
+
 context = document.getElementById('canvas').getContext("2d");
 var socket = io.connect("http://localhost:3000")
 
@@ -5,6 +6,8 @@ var clickX = [];
 var clickY = [];
 var clickDrag = [];
 var paint;
+var game = new Game();
+game.seatPlayers();
 
 document.getElementById("canvas").addEventListener("mousedown", mouseDown);
 document.getElementById("canvas").addEventListener("mousemove", mouseMove);
@@ -30,6 +33,7 @@ socket.on('mouseDown', function(data) {
   paint = true;
   addClick(mouseX, mouseY);
   redraw();
+
 });
 
 
@@ -71,6 +75,7 @@ socket.on('mouseLeave', function(){
   paint=false;
 });
 
+
 function buttonClicked(e) {
   socket.emit('clear');
 }
@@ -82,8 +87,6 @@ socket.on('clear', function(){
     clickY = [];
     clickDrag = [];
 });
-
-
 
  
 function addClick(x, y, dragging) {
